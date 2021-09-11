@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/home/jazonet/.dotnet/store/|arch|/|tfm|",
+      "/home/jazonet/.nuget/packages"
+    ]
+  }
+}
