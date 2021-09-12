@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PlatformService.Data;
+using PlatformService.Data.Interfaces;
+using PlatformService.Data.Repository;
 
 namespace PlatformService
 {
@@ -23,7 +25,9 @@ namespace PlatformService
         {
             services.AddDbContext<PlatformDbContext>(options =>
                 options.UseInMemoryDatabase("InMemoryDatabse"));
-                
+
+            services.AddTransient<IPlatformRepository, PlatformRepository>();
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -34,13 +38,6 @@ namespace PlatformService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PlatformService v1"));
-            }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -51,6 +48,14 @@ namespace PlatformService
             {
                 endpoints.MapControllers();
             });
+            
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PlatformService v1"));
+                app.PreparePopulation();
+            }
         }
     }
 }
