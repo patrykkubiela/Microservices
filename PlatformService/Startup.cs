@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace PlatformService
                 options.UseInMemoryDatabase("InMemoryDatabse"));
 
             services.AddTransient<IPlatformRepository, PlatformRepository>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
