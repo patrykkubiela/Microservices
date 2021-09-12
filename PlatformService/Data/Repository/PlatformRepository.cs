@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using PlatformService.Data.Interfaces;
 using PlatformService.Models;
 
@@ -15,22 +17,25 @@ namespace PlatformService.Data.Repository
 
         public void CreatePlatform(Platform platform)
         {
-            throw new System.NotImplementedException();
+            if (platform == null)
+                throw new ArgumentException("Parameter should be not empty.", nameof(platform));
+
+            _context.Platforms.Add(platform);
         }
 
         public IEnumerable<Platform> GetAllPlatforms()
         {
-            throw new System.NotImplementedException();
+            return _context.Platforms.ToList();
         }
 
         public Platform GetPlatform(int id)
         {
-            throw new System.NotImplementedException();
+            return _context.Platforms.FirstOrDefault(x => x.Id == id);
         }
 
         public bool SaveChanges()
         {
-            throw new System.NotImplementedException();
+            return _context.SaveChanges() >= 0;
         }
     }
 }
