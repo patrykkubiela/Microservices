@@ -30,6 +30,7 @@ namespace PlatformService.Data
                 );
 
                 context.SaveChanges();
+                return;
             }
 
             Console.WriteLine("-----> We already have data in our database.");

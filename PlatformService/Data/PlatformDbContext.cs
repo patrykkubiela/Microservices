@@ -8,7 +8,7 @@ namespace PlatformService.Data
         public DbSet<Platform> Platforms { get; set; }
         
         public PlatformDbContext(DbContextOptions<PlatformDbContext> options)
-        : base()
+        : base(options)
         {
 
         }
