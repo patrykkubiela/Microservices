@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: platform-depl
+  name: platform-service-deploy
 spec:
   replicas: 1
   selector:
@@ -12,6 +12,6 @@ spec:
       labels:
         app: platformservice
     spec:
-      containser:
+      containers:
         - name: platformservice
           image: programistadoswiadczony/platform-service:latest
