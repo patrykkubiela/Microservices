@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace ComandsService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/commands/[controller]")]
     public class PlatformsController : ControllerBase
     {
         private readonly ILogger<PlatformsController> _logger;
