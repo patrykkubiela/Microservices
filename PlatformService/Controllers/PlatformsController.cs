@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlatformService.Data.Interfaces;
 using PlatformService.Dtos;
 using PlatformService.Models;
+using PlatformsService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers
 {
@@ -14,11 +16,13 @@ namespace PlatformService.Controllers
     {
         private readonly IPlatformRepository _platformRepository;
         private readonly IMapper _mapper;
+        private readonly ICommandDataClient _commandDataClient;
 
-        public PlatformsController(IPlatformRepository platformRepository, IMapper mapper)
+        public PlatformsController(IPlatformRepository platformRepository, IMapper mapper, ICommandDataClient commandDataClient)
         {
             _platformRepository = platformRepository;
             _mapper = mapper;
+            _commandDataClient = commandDataClient;
         }
 
         [HttpGet]
@@ -39,14 +43,24 @@ namespace PlatformService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             var newPlatform = _mapper.Map<Platform>(platformCreateDto);
             _platformRepository.CreatePlatform(newPlatform);
             _platformRepository.SaveChanges();
 
+            try
+            {
+                await _commandDataClient.SendPlatformToCommand(platformCreateDto);
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
             var result = _platformRepository.GetPlatform(newPlatform.Id);
-            return CreatedAtRoute(nameof(GetPlatformById), new {id = result.Id}, result);
+            return CreatedAtRoute(nameof(GetPlatformById), new { id = result.Id }, result);
         }
     }
 }
