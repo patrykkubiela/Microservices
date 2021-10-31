@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,10 +15,11 @@ namespace ComandsService.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPost]
+        public IActionResult Get()
         {
-            return new[] {"empty"};
+            Console.WriteLine("test of post to platforms controller with commands");
+            return Ok("Inbound test");
         }
     }
 }
