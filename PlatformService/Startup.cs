@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using PlatformService.Data;
 using PlatformService.Data.Interfaces;
 using PlatformService.Data.Repository;
+using PlatformsService.SyncDataServices.Http;
 
 namespace PlatformService
 {
@@ -27,15 +28,19 @@ namespace PlatformService
             services.AddDbContext<PlatformDbContext>(options =>
                 options.UseInMemoryDatabase("InMemoryDatabse"));
 
+            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+
             services.AddTransient<IPlatformRepository, PlatformRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
+
+            System.Console.WriteLine($"Command service endpoint {Configuration["CommandService:Url"]}");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +56,7 @@ namespace PlatformService
             {
                 endpoints.MapControllers();
             });
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
